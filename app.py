@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import datetime
 from db import connect_db, save_db
 
 CSV_FILE = "data_siswa.csv"
@@ -16,7 +17,7 @@ def tambah_siswa():
     nim = st.text_input("NIM")
     nama = st.text_input("Nama")
     tempat = st.text_input("Tempat Lahir")
-    tanggal = st.date_input("Tanggal Lahir")
+    tanggal = st.date_input("Tanggal Lahir", min_value=datetime.date(1000, 1, 1))
     kelamin = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
     agama = st.text_input("Agama")
     alamat = st.text_area("Alamat")
@@ -50,7 +51,7 @@ def ubah_siswa():
 
     nama = st.text_input("Nama", siswa["nama"])
     tempat = st.text_input("Tempat Lahir", siswa["tempat"])
-    tanggal = st.date_input("Tanggal Lahir", pd.to_datetime(siswa["tanggal"]))
+    tanggal = st.date_input("Tanggal Lahir", pd.to_datetime(siswa["tanggal"]), min_value=datetime.date(1000, 1, 1))
     kelamin = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"], index=0 if siswa["kelamin"] == "Laki-laki" else 1)
     agama = st.text_input("Agama", siswa["agama"])
     alamat = st.text_area("Alamat", siswa["alamat"])
