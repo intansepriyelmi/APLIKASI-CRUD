@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from datetime import date
 from db import connect_db, save_db
 
 CSV_FILE = "data_siswa.csv"
@@ -16,7 +17,11 @@ def tambah_siswa():
     nim = st.text_input("NIM")
     nama = st.text_input("Nama")
     tempat = st.text_input("Tempat Lahir")
-    tanggal = st.date_input("Tanggal Lahir")
+    tanggal = st.date_input(
+        "Tanggal Lahir",
+        min_value=date(1000, 1, 1),
+        max_value=date(9999, 12, 31)
+    )
     kelamin = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"])
     agama = st.text_input("Agama")
     alamat = st.text_area("Alamat")
@@ -50,8 +55,17 @@ def ubah_siswa():
 
     nama = st.text_input("Nama", siswa["nama"])
     tempat = st.text_input("Tempat Lahir", siswa["tempat"])
-    tanggal = st.date_input("Tanggal Lahir", pd.to_datetime(siswa["tanggal"]))
-    kelamin = st.selectbox("Jenis Kelamin", ["Laki-laki", "Perempuan"], index=0 if siswa["kelamin"] == "Laki-laki" else 1)
+    tanggal = st.date_input(
+        "Tanggal Lahir",
+        pd.to_datetime(siswa["tanggal"]).date(),
+        min_value=date(1000, 1, 1),
+        max_value=date(9999, 12, 31)
+    )
+    kelamin = st.selectbox(
+        "Jenis Kelamin",
+        ["Laki-laki", "Perempuan"],
+        index=0 if siswa["kelamin"] == "Laki-laki" else 1
+    )
     agama = st.text_input("Agama", siswa["agama"])
     alamat = st.text_area("Alamat", siswa["alamat"])
     telepon = st.text_input("Telepon", siswa["telepon"])
@@ -76,10 +90,9 @@ def hapus_siswa():
         st.success("Data siswa berhasil dihapus")
 
 def main():
-    # Header dengan logo UNP
-    col1, col2 = st.columns([1, 5])  # kolom kiri lebih kecil
+    col1, col2 = st.columns([1, 5])
     with col1:
-        st.image("logo.png", width=80)  # ganti dengan path/logo sesuai
+        st.image("logo.png", width=80)
     with col2:
         st.title("Data Mahasiswa UNP")
 
